@@ -1,5 +1,23 @@
+interface User {
+  email: string;
+  password: string;
+}
+
+interface ConfirmedUser {
+  email: string;
+  password: string;
+  isActive: true;  
+}
+
+interface Admin {
+  email: string;
+  password: string;
+  isActive: true;
+  adminSince: Date;
+
+}
 export class AccountManager {
-  users = new Array();
+  users: User[] = new Array();
 
   /**
    * Create a new user account
@@ -8,7 +26,7 @@ export class AccountManager {
    * @return the new user account. An admin must activate it using activateNewUser
    * @see this.activateNewUser
    */
-  register(email, password) {
+  register(email: string, password: string): User {
     if(!email) throw 'Must provide an email';
     if(!password) throw 'Must provide a password';
     let user = { email, password };
@@ -22,10 +40,11 @@ export class AccountManager {
    * @param userToApprove Newly-registered user, who is to be activated
    * @return the updated user object, now activated
    */
-  activateNewUser(approver, userToApprove) {
+  activateNewUser(approver: Admin, userToApprove: User): ConfirmedUser {
     if (!approver.adminSince) throw "Approver is not an admin!";
-    userToApprove.isActive = true;
-    return userToApprove;
+    let toConfirm = userToApprove as ConfirmedUser
+    toConfirm.isActive = true;
+    return toConfirm;
   }
 
   /**
@@ -34,10 +53,19 @@ export class AccountManager {
    * @param user an active user who you're making an admin
    * @return the updated user object, now can also be regarded as an admin
    */
-  promoteToAdmin(existingAdmin, user) {
+  promoteToAdmin(existingAdmin: Admin, user: ConfirmedUser) {
     if (!existingAdmin.adminSince) throw "Not an admin!";
     if (user.isActive !== true) throw "User must be active in order to be promoted to admin!";
-    user.adminSince = new Date();
-    return user;
+    let newAdmin = user as Admin;
+    newAdmin.adminSince = new Date();
+    return newAdmin;
   }
 }
+
+let admin: Admin = { email: 'a', password: 'b', isActive: true, adminSince: new Date()};
+let u: User = { email: 'a', password: 'b'};
+let am = new AccountManager()
+let csm = am.activateNewUser(admin, u)
+console.log(csm)
+let admin_csm = am.promoteToAdmin(admin, csm);
+console.log(admin_csm)
