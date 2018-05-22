@@ -3,19 +3,14 @@ interface User {
   password: string;
 }
 
-interface ConfirmedUser {
-  email: string;
-  password: string;
+interface ConfirmedUser extends User {
   isActive: true;  
 }
 
-interface Admin {
-  email: string;
-  password: string;
-  isActive: true;
+interface Admin extends ConfirmedUser  {
   adminSince: Date;
-
 }
+
 export class AccountManager {
   users: User[] = new Array();
 
@@ -66,6 +61,6 @@ let admin: Admin = { email: 'a', password: 'b', isActive: true, adminSince: new 
 let u: User = { email: 'a', password: 'b'};
 let am = new AccountManager()
 let csm = am.activateNewUser(admin, u)
-console.log(csm)
+// console.log(csm)
 let admin_csm = am.promoteToAdmin(admin, csm);
-console.log(admin_csm)
+// console.log(admin_csm)
