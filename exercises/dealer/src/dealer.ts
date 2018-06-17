@@ -40,18 +40,23 @@ export class Dealer {
   cards: Card[] = []
   constructor() {
     this.cards = createDeck()
+    shuffleArray(this.cards)
   }
  
   // deals 5 cards [Suit(0-3), Number(0-12)]
   dealHand(numCards: number): Card[] {
-    return []
+    if (this.getLength() < numCards) throw new Error('you ask for too many cards')
+    if (numCards < 0) throw new Error('you ask for a negative number of cards')
+    return this.cards.splice(this.getLength() - numCards, numCards)
   }
   // number of cards left in the deck
   getLength(): number {
     return this.cards.length
   }
+
   readCard(card: Card): string {
-    return ''
+    let [suit, cardNumber] = card
+    return `${CardNumber[cardNumber]} of ${Suit[suit]}`
   }
 }
 
