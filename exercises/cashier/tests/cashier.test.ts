@@ -52,7 +52,7 @@ if (cashier) {
       c.add('Lemon', 0.99, 2);
       expect(c.length).toBe(2);
     });
-    test('length is 7 after cart.add("Lime", 150.00);', () => {
+    test('length is 3 after cart.add("Lime", 150.00);', () => {
       c.add('Lime', 150.0);
       expect(c.length).toBe(3);
     });
